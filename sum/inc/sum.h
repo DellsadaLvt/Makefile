@@ -1,17 +1,17 @@
-#ifndef __SUM_H
-#define __SUM_H
+// #ifndef __SUM_H
+// #define __SUM_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+// #ifdef __cplusplus
+// extern "C" {
+// #endif /* __cplusplus */
 
 #include <stdio.h>
 #include <stdint.h>
 
 void sum( const uint8_t a, const uint8_t b );
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+// #ifdef __cplusplus
+// }
+// #endif /* __cplusplus */
 
-#endif /* __SUM_H */
+// #endif /* __SUM_H */
