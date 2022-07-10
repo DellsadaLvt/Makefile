@@ -10,14 +10,15 @@ PROJ_NAME := GPIO
 # error when using "="
 #INC_PATH = $(INC_PATH)/Inc
 
-INC_DIR   := $(PROJ_DIR)/sum/inc
-INC_DIR   += $(PROJ_DIR)/sub/inc
+# INC_DIR   := $(PROJ_DIR)/sum/inc
+# INC_DIR   += $(PROJ_DIR)/sub/inc
+INC_DIR   += $(PROJ_DIR)/inc
 INC_FILES := $(foreach INC_DIR, $(INC_DIR), $(wildcard $(INC_DIR)/*.h))
 INC_PATH  := $(foreach INC_DIR, $(INC_DIR), -I $(INC_DIR))
 
 SRC_DIR   := $(PROJ_DIR)/src
-SRC_DIR   += $(PROJ_DIR)/sum
-SRC_DIR   += $(PROJ_DIR)/sub
+# SRC_DIR   += $(PROJ_DIR)/sum
+# SRC_DIR   += $(PROJ_DIR)/sub
 #SRC_FILE := $(wildcard $(SRC_DIR)/*.c)
 SRC_FILES := $(foreach SRC_DIR, $(SRC_DIR), $(wildcard $(SRC_DIR)/*.c))
 # SRC_FILE := $(foreach SRC_DIR, $(SRC_DIR), $(subst $(SRC_DIR)/,,$(wildcard $(SRC_DIR)/*.c)))
@@ -39,12 +40,14 @@ LINKER_FILE := $(PROJ_DIR/)linker/stm32f1_discovery.ld
 CC           := $(COMPILER_DIR)/bin/arm-none-eabi-gcc
 LD           := $(COMPILER_DIR)/bin/arm-none-eabi-ld
 
-CC_OPT       := -mcu=cortex-m3 -c -O0 -g -mthumb -I$(INC_DIR)
-LD_OPT       := -T $(LINKER_FILE) -Map %(OUTPUT_PATH)/$(PROJ_NAME).map
+CC_OPT       := -mcpu=cortex-m3 -c -O0 -g -mthumb -I $(INC_DIR)
+LD_OPT       := -T $(LINKER_FILE) -Map $(OUTPUT_PATH)/$(PROJ_NAME).map
 
 .PHONY: build
-build: $(OBJ_FILES)
-	@gcc $(OBJ_PATH) -o output/main.exe
+build: $(OBJ_FILES) $(LINKER_FILE)
+	$(LD) $(LD_OPT) $(OBJ_PATH) -o $(OUTPUT_PATH)/$(PROJ_NAME).elf
+	$(COMPILER_DIR)/arm-none-eabi/bin/objcopy.exe -O ihex "$(OUTPUT_PATH)/$(PROJ_NAME).elf" "$(OUTPUT_PATH)/$(PROJ_NAME).hex"
+	size $(OUTPUT_PATH)/$(PROJ_NAME).elf
 
 # main.o: src/main.c $(INC_FILES)
 # 	@gcc -I$(INC_DIR) -c $< -o output/$@
@@ -56,7 +59,7 @@ build: $(OBJ_FILES)
 # 	@gcc -I$(INC_DIR) -c $< -o output/$@
 
 %.o: %.c $(INC_FILES)
-	gcc $(INC_PATH) -c $< -o $(OUTPUT_PATH)/$@
+	$(CC) $(CC_OPT) -c $< -o $(OUTPUT_PATH)/$@
 
 # summ.o: sum/summ.c sum/inc/
 # 	@gcc -I sum/inc -c sum/summ.c -o output/summ.o
@@ -74,7 +77,7 @@ run:
 
 .PHONY: clean
 clean:
-	@rm -f Output/*
+	@rm -rf Output/*
 
 .PHONY: print
 print-%:
