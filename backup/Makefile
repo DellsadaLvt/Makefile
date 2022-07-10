@@ -4,43 +4,33 @@
 #
 #
 
-PROJ_DIR  := .
+PROJ_DIR := .
 PROJ_NAME := GPIO
+
 
 # error when using "="
 #INC_PATH = $(INC_PATH)/Inc
 
-INC_DIR   := $(PROJ_DIR)/sum/inc
-INC_DIR   += $(PROJ_DIR)/sub/inc
+INC_DIR := $(PROJ_DIR)/sum/inc
+INC_DIR += $(PROJ_DIR)/sub/inc
 INC_FILES := $(foreach INC_DIR, $(INC_DIR), $(wildcard $(INC_DIR)/*.h))
-INC_PATH  := $(foreach INC_DIR, $(INC_DIR), -I $(INC_DIR))
+INC_PATH := $(foreach INC_DIR, $(INC_DIR), -I $(INC_DIR))
 
-SRC_DIR   := $(PROJ_DIR)/src
-SRC_DIR   += $(PROJ_DIR)/sum
-SRC_DIR   += $(PROJ_DIR)/sub
+SRC_DIR := $(PROJ_DIR)/src
+SRC_DIR += $(PROJ_DIR)/sum
+SRC_DIR += $(PROJ_DIR)/sub
 #SRC_FILE := $(wildcard $(SRC_DIR)/*.c)
 SRC_FILES := $(foreach SRC_DIR, $(SRC_DIR), $(wildcard $(SRC_DIR)/*.c))
 # SRC_FILE := $(foreach SRC_DIR, $(SRC_DIR), $(subst $(SRC_DIR)/,,$(wildcard $(SRC_DIR)/*.c)))
 
-OBJ_FILES   := $(subst .c,.o,$(notdir $(SRC_FILES) ))
+OBJ_FILES := $(subst .c,.o,$(notdir $(SRC_FILES) ))
 OUTPUT_PATH := $(PROJ_DIR)/output
-OBJ_PATH    := $(foreach OBJ_FILES,$(OBJ_FILES),$(OUTPUT_PATH)/$(OBJ_FILES))
+OBJ_PATH := $(foreach OBJ_FILES,$(OBJ_FILES),$(OUTPUT_PATH)/$(OBJ_FILES))
 
 # vpath will search all .h files in include direction
 vpath %.h $(INC_DIR)
 # vpath will search all .c files in source direction
 vpath %.c $(SRC_DIR)
-
-# Compiler
-COMPILER_DIR := C:/GNU_6_2017
-
-LINKER_FILE := $(PROJ_DIR/)linker/stm32f1_discovery.ld
-
-CC           := $(COMPILER_DIR)/bin/arm-none-eabi-gcc
-LD           := $(COMPILER_DIR)/bin/arm-none-eabi-ld
-
-CC_OPT       := -mcu=cortex-m3 -c -O0 -g -mthumb -I$(INC_DIR)
-LD_OPT       := -T $(LINKER_FILE) -Map %(OUTPUT_PATH)/$(PROJ_NAME).map
 
 .PHONY: build
 build: $(OBJ_FILES)
