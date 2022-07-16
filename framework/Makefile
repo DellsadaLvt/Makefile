@@ -4,8 +4,17 @@
 #
 #
 
+
+ifeq ($(MODULE),)
+$(error export MODULE before start run make, e.g: export MODULE=gpio )
+endif
+
+ifeq ($(TEST),)
+$(error export TEST before start run make, e.g: export TEST=gpio_ts_01 )
+endif
+
 PROJ_DIR  := ..
-PROJ_NAME := GPIO
+PROJ_NAME := $(MODULE)
 
 # error when using "="
 #INC_PATH = $(INC_PATH)/Inc
@@ -13,17 +22,16 @@ PROJ_NAME := GPIO
 # INC_DIR   := $(PROJ_DIR)/sum/inc
 # INC_DIR   += $(PROJ_DIR)/sub/inc
 INC_DIR   := ./inc
-INC_DIR   += $(PROJ_DIR)/gpio/inc
-INC_DIR   += $(PROJ_DIR)/test/test_gpio/test_suit/inc
-INC_FILES := $(foreach INC_DIR, $(INC_DIR), $(wildcard $(INC_DIR)/*.h))
-INC_PATH  := $(foreach INC_DIR, $(INC_DIR), -I $(INC_DIR))
-
 SRC_DIR   := ./src
-SRC_DIR   += $(PROJ_DIR)/gpio/src
-SRC_DIR   += $(PROJ_DIR)/test/test_gpio/test_suit/src
+
+# Include gpio test suit 01
+include $(PROJ_DIR)/test/test_$(MODULE)/make/$(TEST)
 # SRC_DIR   += $(PROJ_DIR)/sum
 # SRC_DIR   += $(PROJ_DIR)/sub
 #SRC_FILE := $(wildcard $(SRC_DIR)/*.c)
+
+INC_FILES := $(foreach INC_DIR, $(INC_DIR), $(wildcard $(INC_DIR)/*.h))
+INC_PATH  := $(foreach INC_DIR, $(INC_DIR), -I $(INC_DIR))
 SRC_FILES := $(foreach SRC_DIR, $(SRC_DIR), $(wildcard $(SRC_DIR)/*.c))
 # SRC_FILE := $(foreach SRC_DIR, $(SRC_DIR), $(subst $(SRC_DIR)/,,$(wildcard $(SRC_DIR)/*.c)))
 
@@ -74,6 +82,9 @@ build: $(OBJ_FILES) $(LINKER_FILE)
 # sub.o: sub/subb.c
 # 	@gcc -c sub/subb.c -o output/subb.o
 
+.PHONY: info
+info:
+	@ls $(PROJ_DIR)/test/test_$(MODULE)/make
 
 .PHONY: run
 run:

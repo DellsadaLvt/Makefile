@@ -1,5 +1,6 @@
 #include "stm32f10x.h"
 #include "gpio.h"
+#include "gpio_tc_01.h"
 
 /****************************************************************************************
  *                           Prototypes of the startup file
@@ -15,14 +16,11 @@ void delay(int rep);
  **************************************************************************************************/
 int main(void)
 {
-    gpio_init_pc13();
-    while (1)
+    gpio_tc_01();
+
+    while(1)
     {
-        /* Blinking the Port C pin 13 */
-        gpio_set_pc13();
-        delay(5u);
-        gpio_reset_pc13();
-        delay(5u);
+
     }
 }
 void delay(int rep)

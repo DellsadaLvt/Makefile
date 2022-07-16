@@ -1,3 +1,12 @@
 {
-    "makefile.extensionOutputFolder": "./.vscode"
+    "makefile.extensionOutputFolder": "./.vscode",
+    "files.associations": {
+        "*.inc": "arm",
+        "*.ld": "arm",
+        "*.850": "arm",
+        "*.asm": "arm",
+        "*.map": "arm",
+        "*.sct": "arm",
+        "gpio_tc_01.h": "c"
+    }
 }
