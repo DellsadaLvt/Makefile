@@ -1,4 +1,5 @@
 #include "stm32f10x.h"
+#include "gpio.h"
 
 void gpio_init_pc13(void)
 {
