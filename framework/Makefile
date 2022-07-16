@@ -18,7 +18,8 @@ INC_DIR   += $(PROJ_DIR)/test/test_gpio/test_suit/inc
 INC_FILES := $(foreach INC_DIR, $(INC_DIR), $(wildcard $(INC_DIR)/*.h))
 INC_PATH  := $(foreach INC_DIR, $(INC_DIR), -I $(INC_DIR))
 
-SRC_DIR   := $(PROJ_DIR)/gpio/src
+SRC_DIR   := ./src
+SRC_DIR   += $(PROJ_DIR)/gpio/src
 SRC_DIR   += $(PROJ_DIR)/test/test_gpio/test_suit/src
 # SRC_DIR   += $(PROJ_DIR)/sum
 # SRC_DIR   += $(PROJ_DIR)/sub
@@ -76,7 +77,9 @@ build: $(OBJ_FILES) $(LINKER_FILE)
 
 .PHONY: run
 run:
-	@./output/main.exe
+	# @./output/main.exe
+	./ST-LINKUtility/ST-LINK_CLI.exe -P $(OUTPUT_PATH)/$(PROJ_NAME).hex 0x08000000
+	./ST-LINKUtility/ST-LINK_CLI.exe -rst
 
 .PHONY: clean
 clean:

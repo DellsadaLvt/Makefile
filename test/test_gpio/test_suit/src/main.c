@@ -20,9 +20,9 @@ int main(void)
     {
         /* Blinking the Port C pin 13 */
         gpio_set_pc13();
-        delay(1);
+        delay(5u);
         gpio_reset_pc13();
-        delay(1);
+        delay(5u);
     }
 }
 void delay(int rep)
